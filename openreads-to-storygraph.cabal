@@ -28,6 +28,10 @@ executable openreads-to-storygraph
     , aeson
     , zip-archive
     , bytestring
+    , cassava
+    , vector
+    , time
   other-modules:
       Paths_openreads_to_storygraph
-    , BookEntry
+    , OpenreadsEntry
+    , GoodreadsEntry
