@@ -11,3 +11,7 @@ Build it, either with `nix build` or via `cabal` and then run it via:
 ```
 openreads-to-storygraph backup-file
 ```
+
+# Attribution
+
+Thanks to the [shellcheck](https://github.com/koalaman/shellcheck) team for providing the template for our GitHub workflow that packages the application.
