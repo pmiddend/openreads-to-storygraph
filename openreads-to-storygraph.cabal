@@ -26,5 +26,8 @@ executable openreads-to-storygraph
       base >=4.7 && <5
     , text
     , aeson
+    , zip-archive
+    , bytestring
   other-modules:
-    Paths_openreads_to_storygraph
+      Paths_openreads_to_storygraph
+    , BookEntry

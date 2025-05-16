@@ -8,7 +8,7 @@ ENV TARGETNAME linux.x86_64
 
 # Install GHC and cabal
 USER root
-RUN apk add ghc cabal g++ libffi-dev curl bash
+RUN apk add ghc cabal g++ libffi-dev curl bash zlib-dev zlib zlib-static
 
 # Use ld.bfd instead of ld.gold due to
 # x86_64-linux-gnu/libpthread.a(pthread_cond_init.o)(.note.stapsdt+0x14): error:
