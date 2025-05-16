@@ -65,3 +65,31 @@ jobs:
         with:
           name: ${{matrix.build}}.bin
           path: bin/
+  package_binary:
+    name: Package Binaries
+    needs: build_source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Work around GitHub permissions bug
+        run: chmod +x *.bin/*/openreads-to-storygraph*
+
+      - name: Package binaries
+        run: |
+          export TAGS="$(cat source/tags)"
+          mkdir -p deploy
+          cp -r *.bin/* deploy
+          cd deploy
+          ../.prepare_deploy
+          rm -rf */ README* LICENSE*
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy
+          path: deploy/
