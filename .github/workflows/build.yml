@@ -3,6 +3,43 @@ name: Build openreads-to-storygraph
 on: push
 
 jobs:
+  package_source:
+    name: Package Source Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-mark manual ghc # Don't bother installing ghc just to tar up source
+          sudo apt-get install cabal-install
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Deduce tags
+        run: |
+          mkdir source
+          echo "latest" > source/tags
+          if tag=$(git describe --exact-match --tags)
+          then
+            echo "stable" >> source/tags
+            echo "$tag" >> source/tags
+          fi
+          cat source/tags
+
+      - name: Package Source
+        run: |
+          grep "stable" source/tags || ./setgitversion
+          cabal sdist
+          mv dist-newstyle/sdist/*.tar.gz source/source.tar.gz
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: source
+          path: source/
   build_source:
     name: Build
     needs: package_source
