@@ -172,7 +172,7 @@ realMain archiveFile = do
                       pure (ExitFailure 6)
                     Right bookList -> do
                       let convertedBooks = mapMaybe openreadsToGoodreads bookList
-                      putStrLn $ BL8.unpack (encodeDefaultOrderedByName convertedBooks)
+                      BL8.putStr (encodeDefaultOrderedByName convertedBooks)
                       pure ExitSuccess
 
 main :: IO ExitCode
