@@ -14,7 +14,7 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BL8
 import Data.Csv (encodeDefaultOrderedByName)
 import Data.Either (Either (Left, Right))
-import Data.Eq ((/=))
+import Data.Eq ((/=), (==))
 import Data.Function (($))
 import Data.Functor ((<$>))
 import Data.Int (Int)
@@ -82,37 +82,41 @@ parseBooksFile entry =
 
 openreadsToGoodreads :: OpenreadsEntry -> Maybe GoodreadsEntry
 openreadsToGoodreads or =
-  Just $
-    GoodreadsEntry
-      { bookId = or.id,
-        title = or.title,
-        author = or.author,
-        authorLastFirst = or.author,
-        additionalAuthors = "",
-        isbn = "",
-        isbn13 = or.isbn,
-        myRating = maybe 0.0 (\r -> fromIntegral r / 10) or.rating,
-        averageRating = 0.0,
-        publisher = "",
-        binding = or.book_type,
-        numberOfPages = fromMaybe 0 or.pages,
-        yearPublished = or.publication_year,
-        originalPublicationYear = or.publication_year,
-        dateRead =
-          let convertReading :: OpenreadsReading -> Maybe Day
-              convertReading (OpenreadsReading _ end) = utctDay <$> end
-           in listToMaybe $
-                mapMaybe convertReading (extractOpenreadsReadingList or.readings),
-        dateAdded = Just (openreadsDay or.date_added),
-        bookshelves = "",
-        bookshelvesWithPositions = "",
-        exclusiveShelf = "",
-        myReview = fromMaybe "" or.my_review,
-        spoiler = "",
-        privateNotes = "",
-        readCount = 1,
-        ownedCopies = 1
-      }
+  if or.isbn == ""
+    then Nothing
+    else
+      Just $
+        GoodreadsEntry
+          { bookId = or.id,
+            title = or.title,
+            author = or.author,
+            authorLastFirst = or.author,
+            additionalAuthors = "",
+            isbn = "",
+            isbn13 = or.isbn,
+            myRating = maybe 0.0 (\r -> fromIntegral r / 10) or.rating,
+            averageRating = 0.0,
+            publisher = "",
+            binding = or.book_type,
+            numberOfPages = fromMaybe 0 or.pages,
+            yearPublished = or.publication_year,
+            originalPublicationYear = or.publication_year,
+            dateRead =
+              let convertReading :: OpenreadsReading -> Maybe Day
+                  convertReading (OpenreadsReading _ end) = utctDay <$> end
+               in listToMaybe $
+                    mapMaybe convertReading (extractOpenreadsReadingList or.readings),
+            dateAdded = Just (openreadsDay or.date_added),
+            bookshelves = "",
+            bookshelvesWithPositions = "",
+            -- This, for some reason, is very important for the StoryGraph import to succeed
+            exclusiveShelf = "read",
+            myReview = fromMaybe "" or.my_review,
+            spoiler = "",
+            privateNotes = "",
+            readCount = 1,
+            ownedCopies = 1
+          }
 
 realMain :: FilePath -> IO ExitCode
 realMain archiveFile = do
