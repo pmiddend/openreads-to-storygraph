@@ -14,6 +14,8 @@ openreads-to-storygraph backup-file > output.csv
 
 You can then import the `output.csv` file in StoryGraph and treat it as if it's a Goodreads export.
 
+You can also download the latest binary from the "Releases" page and use that, but only on Linux.
+
 # Attribution
 
 Thanks to the [shellcheck](https://github.com/koalaman/shellcheck) team for providing the template for our GitHub workflow that packages the application.

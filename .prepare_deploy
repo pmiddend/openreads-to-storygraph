@@ -30,13 +30,13 @@ do
 
   for dir in windows.*/
   do
-    ( cd "$dir" && zip "../shellcheck-$tag.zip" * )
+    ( cd "$dir" && zip "../openreads-to-storygraph-$tag.zip" * )
   done
 
   for dir in {linux,darwin}.*/
   do
     base="${dir%/}"
-    ( cd "$dir" && tar -cJf "../shellcheck-$tag.$base.tar.xz" --transform="s:^:shellcheck-$tag/:" * )
+    ( cd "$dir" && tar -cJf "../openreads-to-storygraph-$tag.$base.tar.xz" --transform="s:^:openreads-to-storygraph-$tag/:" * )
   done
 done
 
